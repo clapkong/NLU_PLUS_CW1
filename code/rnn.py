@@ -62,10 +62,9 @@ class RNN(Model):
         y = np.zeros((len(x), self.out_vocab_size))
 
         for t in range(len(x)):
-            pass
-            ##########################
-            # --- your code here --- #
-            ##########################
+            x_t = make_onehot(x[t], self.vocab_size) # int x[t] -> (one-hot encoded vector) int[] x_t
+            s[t] = sigmoid(self.V @ x_t + self.U @ s[t-1]) # f(Vx[t] + Us[t-1])
+            y[t] = softmax(self.W @ s[t]) # g(Ws[t])
 
         return y, s
     
