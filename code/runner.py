@@ -44,7 +44,7 @@ class Runner(object):
 
         y, s = self.model.predict(x) # compute y from input x
 
-        # Total Loss = sum of J[t] for all timestep t
+        # Total Loss -> sum of J[t] for all timestep t
         for t in range(len(x)):
             d_t = make_onehot(d[t], self.model.out_vocab_size) # int d[t] -> (one-hot encoded vector) int[] d_t
             # 1) Calculate (d*log y) for each vocabulary element j, 2) Sum from j=0 to j=out_vocab_size
@@ -100,10 +100,12 @@ class Runner(object):
         '''
 
         mean_loss = 0.
+        total_words = sum(len(x) for x in X)
 
-        ##########################
-        # --- your code here --- #
-        ##########################
+        total_loss = 0.
+        for i in range(len(X)):
+            total_loss += self.compute_loss(X[i], D[i])
+        mean_loss = total_loss / total_words
 
         return mean_loss
 
