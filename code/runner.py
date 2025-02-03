@@ -42,9 +42,12 @@ class Runner(object):
 
         loss = 0.
 
-        ##########################
-        # --- your code here --- #
-        ##########################
+        y, s = self.model.predict(x) # compute y from input x
+
+        for t in range(len(x)):
+            d_t = make_onehot(d[t], self.model.out_vocab_size) # int d[t] -> (one-hot encoded vector) int[] d_t
+            # 1) Calculate (d*log y) for each vocabulary element j, 2) Sum from j=0 to j=out_vocab_size
+            loss += -np.sum(d_t * np.log(y[t]))
 
         return loss
 
