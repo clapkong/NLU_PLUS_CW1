@@ -63,8 +63,8 @@ class RNN(Model):
 
         for t in range(len(x)):
             x_t = make_onehot(x[t], self.vocab_size) # int x[t] -> (one-hot encoded vector) int[] x_t
-            s[t] = sigmoid(self.V @ x_t + self.U @ s[t-1]) # f(Vx[t] + Us[t-1])
-            y[t] = softmax(self.W @ s[t]) # g(Ws[t])
+            s[t] = sigmoid(self.V @ x_t + self.U @ s[t-1]) # f(V⋅x[t] + U⋅s[t-1])
+            y[t] = softmax(self.W @ s[t]) # g(W⋅s[t])
 
         return y, s
     
@@ -86,10 +86,18 @@ class RNN(Model):
         '''
 
         for t in reversed(range(len(x))):
-            pass
-            ##########################
-            # --- your code here --- #
-            ##########################
+            d_t = make_onehot(d[t], self.out_vocab_size) # int d[t] -> (one-hot encoded vector) int[] d_t
+            x_t = make_onehot(x[t], self.vocab_size) # int x[t] -> (one-hot encoded vector) int[] x_t
+
+            # 1. Output Layer Gradient
+            delta_out = d_t - y[t] # δ_out[t] = (d[t] - y[t]) * 1
+            self.deltaW += np.outer(delta_out, s[t]) # ∆W = δ_out[t] ⊗ s[t] 
+
+            # 2. Hidden Layer Gradient
+            delta_in = self.W.T @ delta_out * (s[t]*(1-s[t])) # δ_in[t] = W^T ⋅ δ_out[t] * (s[t] * (1-s[t]))
+            self.deltaV += np.outer(delta_in, x_t) # ∆V = δ_in[t] ⊗ x[t]
+            self.deltaU += np.outer(delta_in, s[t-1]) # ∆U = δ_in[t] ⊗ s[t-1]
+
 
     def acc_deltas_np(self, x, d, y, s):
         '''
