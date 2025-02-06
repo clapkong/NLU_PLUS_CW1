@@ -63,7 +63,7 @@ class RNN(Model):
 
         for t in range(len(x)):
             x_t = make_onehot(x[t], self.vocab_size) # int x[t] -> (one-hot encoded vector) int[] x_t
-            s[t] = sigmoid(self.V @ x_t + self.U @ s[t-1]) # f(V⋅x[t] + U⋅s[t-1])
+            s[t] = sigmoid(self.V @ x_t + self.U @ s[t-1]) # f(V⋅x[t] + U⋅s[t-1]) # NOTE: s[-1] = [0, 0, ...]
             y[t] = softmax(self.W @ s[t]) # g(W⋅s[t])
 
         return y, s
@@ -141,10 +141,27 @@ class RNN(Model):
         '''
 
         for t in reversed(range(len(x))):
-            pass
-            ##########################
-            # --- your code here --- #
-            ##########################
+            d_t = make_onehot(d[t], self.out_vocab_size) # int d[t] -> (one-hot encoded vector) int[] d_t
+            x_t = make_onehot(x[t], self.vocab_size) # int x[t] -> (one-hot encoded vector) int[] x_t 
+
+            # 1. Output Layer Gradient (Same as function acc_delta)
+            delta_out = d_t - y[t] # δ_out[t] = (d[t] - y[t]) * 1
+            self.deltaW += np.outer(delta_out, s[t]) # ∆W = δ_out[t] ⊗ s[t] 
+
+            # 2. Hidden Layer Gradient
+            delta_in = self.W.T @ delta_out * (s[t]*(1-s[t])) # δ_in[t] = W^T ⋅ δ_out[t] * (s[t] * (1-s[t]))
+            self.deltaV += np.outer(delta_in, x_t) # ∆V = δ_in[t] ⊗ x[t]
+            self.deltaU += np.outer(delta_in, s[t-1]) # ∆U = δ_in[t] ⊗ s[t-1]
+
+            # 3. Recurrent Layer Gradient
+            for tau in range(1, steps + 1): 
+                if t - tau < 0:
+                    break
+                delta_in = self.U.T @ delta_in * (s[t-tau] * (1 - s[t-tau]))
+                x_tau = make_onehot(x[t - tau], self.vocab_size)
+
+                self.deltaU += np.outer(delta_in, s[t-tau-1])
+                self.deltaV += np.outer(delta_in, x_tau)
 
 
     def acc_deltas_bptt_np(self, x, d, y, s, steps):
