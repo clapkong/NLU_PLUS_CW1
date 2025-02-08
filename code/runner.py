@@ -66,9 +66,9 @@ class Runner(object):
 
         loss = 0.
 
-        ##########################
-        # --- your code here --- #
-        ##########################
+        y, s = self.model.predict(x) # compute y from input x
+        d_t = make_onehot(d[0], self.model.out_vocab_size) # int d[t] -> (one-hot encoded vector) int[] d_t. out_vocab_size should always be 2, as it can either be VBP or VBZ
+        loss = -np.sum(d_t * np.log(y[-1])) # J(t) for t=t (only one prediction at the end)
 
         return loss
 
