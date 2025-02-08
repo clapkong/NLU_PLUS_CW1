@@ -438,11 +438,35 @@ if __name__ == "__main__":
         # this is the best expected loss out of that set
         q = vocab.freq[vocab_size] / sum(vocab.freq[vocab_size:])
 
-        ##########################
-        # --- your code here --- #
-        ##########################
+        # 1. Intializing RNN Model
+        print("\nInitializing RNN model...")
+        rnn = RNN(vocab_size, hdim, vocab_size) # instantiate the RNN clas
+        runner = Runner(rnn) # instantiate the Runner class with the RNN
+        
+        # 2. Train RNN Model  
+        print("\nStarting training...")
+        start_time = time.time()
+        run_loss = runner.train(
+            X_train, D_train, X_dev, D_dev, 
+            epochs=10, learning_rate=lr, anneal=5, 
+            back_steps=lookback, batch_size=100, log=True) # call the train method on the RNN with the appropriate arguments
+        elapsed_time = time.time() - start_time
 
-        run_loss = -1
+        print("\nTraining complete!")
+        print("Total training time: {:.2f} seconds".format(elapsed_time))
+
+        # 3. Save Weights
+        print("\nSaving trained model parameters...")
+        np.save("rnn.U.npy", rnn.U) # save the resulting matrices
+        np.save("rnn.V.npy", rnn.V) #
+        np.save("rnn.W.npy", rnn.W) #
+
+        
+        print("Sample of learned U matrix:\n", rnn.U[:5, :5])
+        print("Sample of learned V matrix:\n", rnn.V[:5, :5])
+        print("Sample of learned W matrix:\n", rnn.W[:5, :5])
+
+        # run_loss = -1
 
         print("Run loss: %.03f" % np.exp(run_loss))
 
