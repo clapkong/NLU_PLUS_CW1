@@ -83,9 +83,9 @@ class Runner(object):
         return 1 if argmax(y[t]) == d[0], 0 otherwise
         '''
 
-        ##########################
-        # --- your code here --- #
-        ##########################
+        y, s = self.model.predict(x) # compute y from input x
+        if np.argmax(y[-1]) == d[0]:
+            return 1
 
         return 0
 
