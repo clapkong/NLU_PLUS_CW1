@@ -103,8 +103,8 @@ class GRU(GRUAbstract):
         no return values
         '''
 
-        ##########################
-        # --- your code here --- #
-        ##########################
+        t = len(x) - 1 # last time step t (because we only have one output, only at the end)
+        d_t = make_onehot(d[0], self.out_vocab_size) # int d[0] -> (one-hot encoded vector) int[] d_t
+        delta_output = d_t - y[t] # δ_out[t] = (d[t] - y[t])
 
         self.backward(x, t, s, delta_output, steps)
