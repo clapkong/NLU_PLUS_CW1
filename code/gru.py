@@ -50,9 +50,12 @@ class GRU(GRUAbstract):
 
         '''
 
-        ##########################
-        # --- your code here --- #
-        ##########################
+        x_t = make_onehot(x, self.vocab_size) # int x -> (one-hot encoded vector) int[] x_t
+        r = sigmoid(self.Vr @ x_t + self.Ur @ s_previous) # r[t] = sigmoid(Vr⋅x[t]+Ur⋅s[t-1])
+        z = sigmoid(self.Vz @ x_t + self.Uz @ s_previous) # z[t] = sigmoid(Vz⋅x[t]+Uz⋅s[t-1])
+        h = np.tanh(self.Vh @ x_t + self.Uh @ (r * s_previous)) # h[t] = tanh(Vh⋅x[t]+Uh⋅(r*s[t-1]))
+        s = z * s_previous + (1-z) * h # s[t] = z[t]*s[t-1] + (1-z[t])*h[t]
+        y = softmax(self.W @ s) # y[t] = softmax(W⋅s[t])
 
         return y, s, h, z, r
 
