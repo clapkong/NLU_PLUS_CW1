@@ -438,6 +438,8 @@ if __name__ == "__main__":
         # this is the best expected loss out of that set
         q = vocab.freq[vocab_size] / sum(vocab.freq[vocab_size:])
 
+        # ================================================================== #
+        
         # 1. Intializing RNN Model
         print("\nInitializing RNN model...")
         rnn = RNN(vocab_size, hdim, vocab_size) # instantiate the RNN clas
@@ -511,11 +513,19 @@ if __name__ == "__main__":
         X_dev = X_dev[:dev_size]
         D_dev = D_dev[:dev_size]
 
-        ##########################
-        # --- your code here --- #
-        ##########################
+        # ================================================================== #
+        
+        # 1. Intializing RNN Model
+        rnn = RNN(vocab_size, hdim, 2) # instantiate the RNN clas
+        runner = Runner(rnn) # instantiate the Runner class with the RNN
 
-        acc = 0.
+        # 2. Train RNN Model
+        runner.train_np(X_train, D_train, X_dev, D_dev, epochs=10, learning_rate=lr, back_steps=lookback)
+
+        # 3. Calculate Accuracy
+        acc = sum([runner.compute_acc_np(X_dev[i], D_dev[i]) for i in range(len(X_dev))]) / len(X_dev)
+
+        # acc = 0.
 
         print("Accuracy: %.03f" % acc)
 
@@ -560,10 +570,18 @@ if __name__ == "__main__":
         X_dev = X_dev[:dev_size]
         D_dev = D_dev[:dev_size]
 
-        ##########################
-        # --- your code here --- #
-        ##########################
+        # ================================================================== #
 
-        acc = 0.
+        # 1. Initialize GRU and Runner
+        gru = GRU(vocab_size, hdim, 2)
+        runner = Runner(gru)
+
+        # 2. Train GRU
+        runner.train_np(X_train, D_train, X_dev, D_dev, epochs=10, learning_rate=lr, back_steps=lookback)
+
+        # 3. Calculate Accuracy
+        acc = sum([runner.compute_acc_np(X_dev[i], D_dev[i]) for i in range(len(X_dev))]) / len(X_dev)
+
+        #acc = 0.
 
         print("Accuracy: %.03f" % acc)
