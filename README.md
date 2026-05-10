@@ -2,7 +2,7 @@
 
 **University of Edinburgh** · Natural Language Understanding, Generation and Machine Translation (NLU+) · Spring 2025 (exchange)
 
-NumPy-only implementation of Recurrent Neural Networks and Gated Recurrent Units, including manual gradient derivation and Backpropagation Through Time (BPTT). Achieved **full marks (30/30)** on automated evaluation.
+NumPy-only implementation of Recurrent Neural Networks and Gated Recurrent Units, including manual gradient derivation and Backpropagation Through Time (BPTT). 
 
 ---
 
@@ -22,8 +22,6 @@ The model abstractions, training loop, GRU backward pass, and test suite were pr
 - **RNN** (`rnn.py`): forward pass, standard backpropagation, and truncated BPTT — all gradient accumulation written from scratch
 - **GRU** (`gru.py`): forward cell (reset/update gates, candidate state), with gradient dispatch to the provided abstract backward pass
 - **Training utilities** (`runner.py`): cross-entropy loss for LM, loss/accuracy for number agreement, training mode setup for all three configurations
-
----
 
 ## Results
 
