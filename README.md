@@ -15,7 +15,7 @@ The coursework required implementing recurrent architectures at the mathematical
 
 ## Implementation
 
-The model abstractions, training loop, GRU backward pass, and test suite were provided as skeleton code. Core implementations:
+The model abstractions, training loop, GRU backward pass, and test suite were provided as skeleton code. Achieved **full marks (30/30)** on automated evaluation. Core implementations:
 
 - **RNN** (`rnn.py`): forward pass, standard backpropagation, and truncated BPTT — all gradient accumulation written from scratch
 - **GRU** (`gru.py`): forward cell (reset/update gates, candidate state), with gradient dispatch to the provided abstract backward pass
