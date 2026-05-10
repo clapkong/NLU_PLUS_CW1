@@ -1,4 +1,4 @@
-# RNN & GRU from Scratch — NLP Coursework
+# RNN & GRU — NLP Coursework
 
 **University of Edinburgh** · Natural Language Understanding, Generation and Machine Translation (NLU+) · Spring 2025 (exchange)
 
@@ -42,14 +42,20 @@ The model abstractions, training loop, GRU backward pass, and test suite were pr
 ## Written Report
 
 ### Assignment
-- **Q2**: Tune hyperparameters (learning rate × hidden units × BPTT steps); train best model on 25K sentences; report test loss and perplexity.
-- **Q3**: Compare RNN and GRU across hidden unit sizes (10, 25, 50) on the number agreement task.
-- **Q4**: Design one experiment comparing RNN vs. GRU under varying BPTT steps, with a hypothesis and interpretation.
+**Q2**: Tune hyperparameters (learning rate × hidden units × BPTT steps); train best model on 25K sentences; report test loss and perplexity.
+
+**Q3**: Compare RNN and GRU across hidden unit sizes (10, 25, 50) on the number agreement task.
+
+**Q4**: Design one experiment comparing RNN vs. GRU under varying BPTT steps, with a hypothesis and interpretation.
+
 
 ### Report (`report.pdf`)
-- **Q2**: Ran all 18 hyperparameter configurations (lr ∈ {0.05, 0.1, 0.5} × hidden ∈ {25, 50} × BPTT ∈ {0, 2, 5}), recording training time per run alongside loss. Final model trained on 25K sentences; test perplexity: **86.78** (dev loss 4.459, test loss 4.463).
-- **Q3**: Compared RNN and GRU with hidden units (10, 25, 50), tracking loss and accuracy at every epoch. Best accuracy: GRU-50 at **75.1%** vs. RNN-50 at **68.7%**. Analysed gradient stability differences and included formal computational complexity derivation — RNN O(T(s²+sd)) vs. GRU O(T(3s²+3sd)) — in an appendix.
-- **Q4**: Ran two experiments where only one was required.
+**Q2**: Ran all 18 hyperparameter configurations (lr ∈ {0.05, 0.1, 0.5} × hidden ∈ {25, 50} × BPTT ∈ {0, 2, 5}), recording training time per run alongside loss. Final model trained on 25K sentences; test perplexity: **86.78** (dev loss 4.459, test loss 4.463).
+
+**Q3**: Compared RNN and GRU with hidden units (10, 25, 50), tracking loss and accuracy at every epoch. Best accuracy: GRU-50 at **75.1%** vs. RNN-50 at **68.7%**. Analysed gradient stability differences and included formal computational complexity derivation — RNN O(T(s²+sd)) vs. GRU O(T(3s²+3sd)) — in an appendix.
+
+**Q4**: Ran two experiments where only one was required.
+
   1. **BPTT step analysis**: Tested BPTT ∈ {5, 10, 20, 30, 50} over 40 epochs on 25K sentences. Extended the training loop to log gradient norms (∥ΔU∥ for RNN; ∥ΔUr∥, ∥ΔUz∥, ∥ΔUh∥ for GRU) at every timestep. Finding: BPTT=10 optimal; performance plateaus beyond ~15 steps.
   2. **Gate ablation study** (self-designed): Trained four GRU variants — baseline, reset-gate disabled, update-gate disabled, both disabled. Finding: disabling the update gate hurts more than disabling the reset gate; both-disabled underperformed even a standard RNN despite having more parameters.
 
