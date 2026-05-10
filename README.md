@@ -13,8 +13,6 @@ The coursework required implementing recurrent architectures at the mathematical
 1. **Language Modeling**: train an RNN to predict the next word in a sequence (Wikipedia corpus, vocab size 2000, cross-entropy objective).
 2. **Number Agreement Prediction**: given a sentence containing a relative clause, predict subject-verb number agreement (binary: singular VBZ vs. plural VBP). This task probes whether recurrent models can track long-range syntactic dependencies — a classic evaluation setting from Linzen et al. (2016).
 
----
-
 ## Implementation
 
 The model abstractions, training loop, GRU backward pass, and test suite were provided as skeleton code. Core implementations:
@@ -22,18 +20,6 @@ The model abstractions, training loop, GRU backward pass, and test suite were pr
 - **RNN** (`rnn.py`): forward pass, standard backpropagation, and truncated BPTT — all gradient accumulation written from scratch
 - **GRU** (`gru.py`): forward cell (reset/update gates, candidate state), with gradient dispatch to the provided abstract backward pass
 - **Training utilities** (`runner.py`): cross-entropy loss for LM, loss/accuracy for number agreement, training mode setup for all three configurations
-
-## Results
-
-| Component | Points |
-|-----------|--------|
-| RNN forward pass | 5/5 |
-| RNN loss computation | 5/5 |
-| RNN standard BP | 5/5 |
-| RNN BPTT | 5/5 |
-| Number prediction — RNN (BP + BPTT) | 5/5 |
-| Number prediction — GRU (BP + BPTT) | 5/5 |
-| **Total** | **30/30** |
 
 ---
 
